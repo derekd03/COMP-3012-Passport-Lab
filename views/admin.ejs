@@ -1,0 +1,26 @@
+<!--- student-added admin layout --->
+<h1 class="mt-4">Admin Dashboard</h1>
+<p class="lead mb-3">Welcome <%= user.name %>
+</p>
+<p>Current Active Sessions:</p>
+<div id="sessions">
+    <!--- Loop through each session --->
+    <% Object.keys(sessionStore.sessions).forEach(function(key) { const session=JSON.parse(sessionStore.sessions[key]);
+        %>
+        <p>
+            <!--- Display Session ID and Key --->
+            SessionID:<%= key %><br>
+                UserID:<%= session.passport.user %><br>
+                    <!--- Clickable link that destroys a session --->
+                    <a href="/auth/revoke?id=<%=key %>">
+                        Revoke Session
+                    </a>
+                    <form id="revoke-session-form-<%= key %>" method="post"
+                        action="/auth/revoke-session/<%= session.passport.user %>">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="session_id" value="<%= key %>">
+                    </form>
+        </p>
+        <% }); %>
+</div>
+<a href="/auth/logout" class="btn btn-secondary">Logout</a>
